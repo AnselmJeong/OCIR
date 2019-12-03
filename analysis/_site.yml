@@ -1,7 +1,7 @@
-name: "wflow_OCIR"
+name: "Analyzing multivariate relationship among OCIR, LUNSERS and PANSS"
 output_dir: ../docs
 navbar:
-  title: "wflow_OCIR"
+  title: "Relationship among OCIR, LUNSERS and PANSS"
   left:
   - text: Home
     href: index.html
