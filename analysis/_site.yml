@@ -3,16 +3,8 @@ output_dir: ../docs
 navbar:
   title: "Relationship among OCIR, LUNSERS and PANSS"
   left:
-  - text: Data Preprocessing
-    href: 01_data_preprocessing.html
-  - text: Basic Analysis
-    href: 02_basic_analysis.html
-  - text: OCIR
-    href: 03_change_OCIR.html
-  - text: LUNSERS
-    href: 04_change_LUNSERS.html
-  - text: PANSS
-    href: 05_change_PANSS.html
+  - text: Home
+    href: index.html
   - text: About
     href: about.html
   - text: License
