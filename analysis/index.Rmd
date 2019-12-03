@@ -8,9 +8,9 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+# Welcome to my research website.
 
-# View analysis result
+## View analysis result
 
 ### [01. Data Preprocessing](01_data_preprocessing.html)
 ### [02. Basic Analysis](02_basic_analysis.html)
