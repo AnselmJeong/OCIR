@@ -1,0 +1,207 @@
+---
+title: "Temporal change of OCIR total and subscores"
+output: html_notebook
+---
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(glue)
+  library(moonBook)
+  library(anselmEDA)
+  library(here)
+  library(patchwork)
+  library(knitr)
+  library(ggsci)
+  library(lemon)
+})
+
+theme_set(theme_bw())
+```
+
+# Load data
+```{r}
+data <- readRDS(paste0(here(), "/data/data.rds"))
+
+data <- data %>%
+  group_by(hosp_id) %>%
+  mutate(has_OCD = factor(max(OCI_total) >= 21, levels = c(FALSE, TRUE), labels = c("no OCD", "has OCD"))) %>%
+  mutate(high_SE = factor(max(LUN_score) >= 59, levels = c(FALSE, TRUE), labels = c("low SE", "high SE"))) %>%
+  ungroup()
+```
+
+
+# OCIR의 변화 양상
+
+
+## OCIR_total의 변화양상
+```{r}
+data %>% ggplot(aes(measure_point, OCI_total)) +
+  geom_smooth(size=2, se=T, method="lm") +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  scale_color_npg()
+```
+* 전혀 변화없다.
+
+
+## OCIR subscales의 변화
+
+```{r, fig.width=7, fig.height=7}
+data_long <- data %>%
+   pivot_longer(cols = starts_with("OCI"), names_to = "subscale", values_to = "value")
+
+data_long %>% 
+  filter(subscale != "OCI_total") %>%
+  ggplot(aes(measure_point, value)) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  geom_smooth(method = "lm") +
+  facet_wrap(vars(subscale), ncol = 2, scales = "free_y") +
+  scale_color_npg()
+```
+* 변화가 잘 눈에 띄지 않는다.
+
+
+
+## 환자들의 has_OCD 여부에 따른 OCIR_total의 변화 양상
+
+```{r}
+data %>% ggplot(aes(measure_point, OCI_total, 
+                    color=has_OCD)) +
+  geom_smooth(size = 2, se = T, method = "lm") +
+  geom_line(aes(group = hosp_id), color = "lightgray") +
+  geom_point() +
+  scale_color_npg() +
+  guides(color=guide_legend("OCD")) +
+  xlab("Days since the start of clozapine trial")
+```
+
+## 환자들의 has_OCD 여부에 따른 OCIR subscales의 변화 양상
+
+```{r, fig.width=7, fig.height=7}
+data_long <- data %>%
+   pivot_longer(cols = starts_with("OCI"), names_to = "subscale", values_to = "value")
+
+data_long %>% 
+  filter(subscale != "OCI_total") %>%
+  ggplot(aes(measure_point, value, color = has_OCD)) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  geom_smooth(method = "lm") +
+  facet_wrap(vars(subscale), ncol = 2, scales = "free_y") +
+  scale_color_npg()
+```
+* 다른 것은 별 변화없는데, OCI_hoard, OCI_neutr, OCI_order는 감소하고, OCI_obse, OCI_wash는 증가한다.
+* 그런데 왜 OCD가 없는 환자들의 OCI_obse가 증가하지요??
+
+
+## LUNSERS(+) 여부에 따른 OCIR의 변화 양상
+
+```{r}
+data %>% ggplot(aes(measure_point, OCI_total, 
+                    color=high_SE)) +
+  geom_smooth(size = 2, se = T, method = "lm") +
+  geom_line(aes(group = hosp_id), color = "lightgray") +
+  geom_point() +
+  scale_color_npg() +
+  xlab("Days since the start of clozapine trial")
+```
+* 뚜렷한 것은 high SE는 OCIR도 높다는 것. 하지만 high, low 여부에 따라서는 OCIR의 변화 양상이 달라지지는 않음
+
+```{r fig.width=7, fig.height=7}
+data_long <- data %>%
+   pivot_longer(cols = starts_with("OCI"), names_to = "subscale", values_to = "value")
+
+data_long %>% 
+  filter(subscale != "OCI_total") %>%
+  ggplot(aes(measure_point, value, color = high_SE)) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  geom_smooth(method = "lm") +
+  facet_wrap(vars(subscale), ncol = 2, scales = "free_y") +
+  scale_color_npg()
+```
+
+* high SE에서 OCI_obse가 점점 증가한다는 정도....?
+
+
+## Clozapine 사용 여부에 따른 OCIR의 변화 양상
+* 하지만 clozapine 비사용군의 숫자가 적어 비교하는 의미가 없음.
+```{r}
+data %>% ggplot(aes(measure_point, OCI_total, 
+                    color = factor(cloz_ever,
+                                   labels = c("never", "have used")))) +
+ 
+  geom_pointline(aes(group = hosp_id), alpha = 0.4) +
+  geom_smooth(size = 2, se = T, method = "lm") +
+  scale_color_npg() +
+  guides(color=guide_legend("Clozapine ever used")) +
+  xlab("Days since the start of clozapine trial")
+```
+* 오히려 clozapine을 안 쓴 군이 더 시간이 지나면서 증가하는 역설적인 상황
+
+```{r}
+data_long %>% 
+  filter(subscale != "OCI_total") %>%
+  ggplot(aes(measure_point, value, 
+                    color = factor(cloz_ever,
+                                   labels = c("never", "have used")))) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  geom_smooth(size = 2, se = T, method = "lm") +
+  scale_color_npg() +
+  guides(color=guide_legend("Clozapine ever used")) +
+  facet_wrap(vars(subscale), ncol=2, scales='free_y') +
+  xlab("Days since the start of clozapine trial")
+```
+
+## Antidepressant 사용 여부에 따른 OCIR의 변화 양상
+
+```{r}
+data %>% 
+  ggplot(aes(measure_point, OCI_total,
+             color=factor(antidepressant_ever,
+                               labels=c("never", "have used")))) +
+  geom_smooth(method="lm", size=2) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  scale_color_discrete("Antidepessant ever used")
+```
+* Antidepressant를 사용해도 OCIR의 호전은 기대하기 어려움. 오히려 antipressant를 사용하지 않은 군은 점점 점수가 떨어짐. 즉 antidepressant가 오히려 방해를 ???
+
+```{r}
+OCD_labels <- c(`TRUE`="has OCD", `FALSE`="no OCD")
+
+data %>% 
+  ggplot(aes(measure_point, OCI_total,
+             color=factor(antidepressant_ever,
+                               labels=c("never", "have used")))) +
+  geom_smooth(method="lm", size=2) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  scale_color_npg() +
+  guides(color=guide_legend("Antidepressant ever used")) +
+  facet_wrap(vars(has_OCD), labeller = as_labeller(OCD_labels))
+```
+* 눈에 띄는 것은 OCD가 없는 환자에서 antidepressant를 사용하면 오히려 OCIR이 증가하고, OCD(+)인 환자군에서는 회복을 방해한다는 것.
+
+
+## Mood stabilizer 사용 여부에 따른 OCIR의 변화 양상
+
+```{r}
+data %>% filter(cloz_ever==1) %>% 
+  ggplot(aes(measure_point, OCI_total,
+             color=factor(mood_stabilizer_ever,
+                               labels=c("never", "have used")))) +
+  geom_smooth(method="lm", size=2) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  scale_color_discrete("Mood stabilizer ever used")
+```
+* 왜 mood stabilizer를 쓰면 OCIR이 감소하지?
+
+```{r}
+data %>% filter(cloz_ever==1) %>% 
+  ggplot(aes(measure_point, OCI_total,
+             color=factor(mood_stabilizer_ever,
+                               labels=c("never", "have used")))) +
+  geom_smooth(method="lm", size=2) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  scale_color_discrete("Mood stabilizer ever used") +
+  facet_wrap(vars(has_OCD), labeller = as_labeller(OCD_labels))
+```
+* 다시 실망스러운 결과, mood stabilizer를 써도 has OCD 군에서 증상을 악화시킨다.
+

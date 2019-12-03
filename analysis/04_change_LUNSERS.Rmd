@@ -1,0 +1,91 @@
+---
+title: "Temporal change of LUNSERS"
+output: html_notebook
+---
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(glue)
+  library(moonBook)
+  library(anselmEDA)
+  library(here)
+  library(patchwork)
+  library(knitr)
+  library(ggsci)
+  library(lemon)
+})
+
+theme_set(theme_bw())
+```
+
+# Load data
+```{r}
+data <- readRDS(paste0(here(), "/data/data.rds"))
+
+data <- data %>%
+  group_by(hosp_id) %>%
+  mutate(has_OCD = factor(max(OCI_total) >= 21, levels = c(FALSE, TRUE), labels = c("no OCD", "has OCD"))) %>%
+  mutate(high_SE = factor(max(LUN_score) >= 59, levels = c(FALSE, TRUE), labels = c("low SE", "high SE"))) %>%
+  ungroup()
+```
+
+
+
+# LUNSERS의 변화 양상
+
+
+## 전체적인 변화 양상
+
+```{r}
+data %>% ggplot(aes(measure_point, LUN_score)) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  geom_smooth(method="lm", size=2)
+```
+
+* 전체적으로 조금씩은 감소
+
+```{r}
+data %>% ggplot(aes(measure_point, LUN_score, color=high_SE)) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  geom_smooth(method="lm", size=2)
+```
+
+* high SE에 속했던 군은 시간이 갈 수록 점점 완화됨.
+
+
+
+
+
+## Clozapine 사용 여부에 따른 변화 양상
+
+```{r}
+data %>% ggplot(aes(measure_point, LUN_score,color=factor(cloz_ever, 
+                               labels=c("never", "have used")))) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  geom_smooth(method="lm", size=4) +
+  scale_color_discrete("Clozapine ever used")
+```
+* 조금씩 떨어지긴 한다.
+
+## OCD 여부에 따른 변화 양상
+
+```{r}
+data %>% 
+  ggplot(aes(measure_point, LUN_score,color=factor(has_OCD))) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  geom_smooth(method="lm", size=4) +
+  scale_color_discrete("Has OCD")
+```
+* OCD가 있었던 군에서 조금씩 감소
+
+
+# Red Herring은 변하하나?
+```{r}
+data %>% ggplot(aes(measure_point, RH_score,color=factor(has_OCD))) +
+  geom_pointline(aes(group=hosp_id), alpha=0.2) +
+  geom_smooth(method="lm", size=2) +
+  scale_color_discrete("Has OCD")
+```
+* 신기하게도 전혀 변화가 없네요.
+

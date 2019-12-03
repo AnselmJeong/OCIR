@@ -1,0 +1,133 @@
+---
+title: "Temporal change of PANSS"
+output: html_notebook
+---
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(glue)
+  library(moonBook)
+  library(anselmEDA)
+  library(here)
+  library(patchwork)
+  library(knitr)
+  library(ggsci)
+  library(lemon)
+})
+
+theme_set(theme_bw())
+```
+
+# Load data
+```{r}
+data <- readRDS(paste0(here(), "/data/data.rds"))
+
+data <- data %>%
+  group_by(hosp_id) %>%
+  mutate(has_OCD = factor(max(OCI_total) >= 21, levels = c(FALSE, TRUE), labels = c("no OCD", "has OCD"))) %>%
+  mutate(high_SE = factor(max(LUN_score) >= 59, levels = c(FALSE, TRUE), labels = c("low SE", "high SE"))) %>%
+  ungroup()
+```
+
+# 도대체 PANSS는 변화했나?
+
+
+```{r}
+panss_longer <- data %>% 
+  select(hosp_id, sex, age, cloz_ever, antidepressant_ever, mood_stabilizer_ever, has_OCD, high_SE, starts_with("PANSS"), measure_point) %>% 
+  pivot_longer(cols = starts_with("PANSS")) 
+
+panss_longer %>% 
+  ggplot(aes(measure_point, value)) + 
+  geom_pointline(aes(group=hosp_id), alpha=0.2) + 
+  geom_smooth(se=F, size=2, method="lm") +
+  facet_wrap(vars(name), scale='free_y')
+```
+
+* PANSS_neg를 제외하고는 대체로 눈에 띄게 호전됨
+
+## has_OCD 여부에 따른 변화
+
+```{r}
+panss_longer %>% 
+  ggplot(aes(measure_point, value, color=has_OCD)) + 
+  geom_pointline(aes(group=hosp_id), alpha=0.2) + 
+  geom_smooth(se=F, size=2, method="lm") +
+  facet_wrap(vars(name), scale='free_y')
+```
+* OCD(+)인 환자는 PANSS의 변화폭이 감소됨. 특히 PANSS_neg, PANSS_gen에서 이런 차이가 두드러짐.
+
+
+## high_SE 여부에 따른 변화
+
+```{r}
+panss_longer %>% 
+  ggplot(aes(measure_point, value, color=high_SE)) + 
+  geom_pointline(aes(group=hosp_id), alpha=0.2) + 
+  geom_smooth(se=F, size=2, method="lm") +
+  facet_wrap(vars(name), scale='free_y')
+```
+
+* OCI 여부보다는 영향이 적음. 그러나 여기서도 high side effect군이 회복이 늦음.
+
+# Hwang factor의 변화는?
+
+```{r}
+HW_longer <- data %>% 
+  select(hosp_id, sex, age, cloz_ever, antidepressant_ever, mood_stabilizer_ever, has_OCD, high_SE, starts_with("HW"), measure_point) %>% 
+  pivot_longer(cols = starts_with("HW")) 
+
+HW_longer %>% 
+  ggplot(aes(measure_point, value)) + 
+  geom_pointline(aes(group=hosp_id), alpha=0.2) + 
+  geom_smooth(se=F, size=2, method="lm") +
+  facet_wrap(vars(name), scale='free_y')
+```
+
+* 대부분 좋아지지만, HW_neg, HW_anx는 별로 좋아지지 않음.
+
+## has_OCD 여부에 따른 차이는?
+
+```{r}
+HW_longer %>% 
+  ggplot(aes(measure_point, value, color=has_OCD)) + 
+  geom_pointline(aes(group=hosp_id), alpha=0.2) + 
+  geom_smooth(se=F, size=2, method="lm") +
+  facet_wrap(vars(name), scale='free_y')
+```
+
+* 유사한 결과. 거의 모든 지표가 좋아지지만, OCD(+) 군에서 HW_neg는 호전이 없고, HW_anx/dep는 오히려 악화
+
+## high_SE 여부에 따른 차이는?
+
+```{r}
+HW_longer %>% 
+  ggplot(aes(measure_point, value, color=high_SE)) + 
+  geom_pointline(aes(group=hosp_id), alpha=0.2) + 
+  geom_smooth(se=F, size=2, method="lm") +
+  facet_wrap(vars(name), scale='free_y')
+```
+
+* low_SE는 HW_pos의 호전이 두드러짐. 변화 양상의 차이보다는 LUNSER와 HW_anx가 밀접한 연관이 있다는 관찰결과
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

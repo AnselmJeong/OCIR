@@ -1,0 +1,101 @@
+---
+title: "Data Pre-processign"
+output:
+  html_document:
+    df_print: paged
+---
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(lemon)
+  library(here)
+  library(visdat)
+})
+
+theme_set(theme_bw())
+```
+
+# Load data and Preprocess
+```{r}
+data_path <- paste0(here(), "/data/data.csv")
+data_original <- read_csv(data_path, 
+                 col_types = cols(age = col_integer(), 
+                                  sex = col_factor(levels = c("M", "F")), 
+                                  IQ = col_integer(), 
+                                  edu = col_integer(), 
+                                  marriage = col_integer(), 
+                                  job = col_integer(), 
+                                  cloz_use = col_integer(),
+                                  doi = col_integer(), 
+                                  dom = col_integer(), 
+                                  measure_at = col_date(format = "%m/%d/%Y")))
+```
+
+## Eliminate duplicated rows
+```{r}
+nrow(data_original)
+data_unique <- data_original %>% distinct(hosp_id, measure_at, .keep_all = T)
+nrow(data_unique)
+```
+
+## Unify demographic data
+```{r}
+data_unique <- data_unique %>%
+  group_by(hosp_id) %>% 
+  arrange(measure_at) %>% 
+  mutate(age = age[1], sex=sex[1], IQ=IQ[1], 
+         edu=edu[1], marriage=marriage[1], job=job[1],
+         doi=doi[1], dom=dom[1],
+         cloz_ever=as.numeric(any(cloz_use==2)),
+         mood_stabilizer_ever=as.numeric(any(!is.na(mood_stabilizer))),
+         antidepressant_ever=as.numeric(any(!is.na(antidepressant)))
+         )
+```
+
+
+## Calculate the time of measurement based on clozapine start date
+* 만약 clozapine 사용 시작 이전에 측정값이 있었다면, 이들은 negative value를 갖게 된다.
+
+```{r}
+data <- data_unique %>% group_by(hosp_id) %>% 
+  arrange(measure_at) %>% mutate(clozapine_start = 
+                                   ifelse(cloz_ever == 1, measure_at[cloz_use==2][1],
+                                   measure_at[1])) %>% 
+  mutate(measure_point = as.numeric(measure_at - clozapine_start)) %>% 
+  drop_na(measure_point) %>% ungroup
+```
+
+## Visualization of missing data 
+```{r fig.width=7, fig.height=12}
+(data %>% select(-hosp_id, -age, -sex, -ends_with('ever')) %>% vis_miss) + coord_flip()
+```
+
+
+
+```{r}
+data %>% ggplot(aes(measure_point, LUN_score, group=hosp_id)) +
+  geom_pointline(size=2) + annotate('text', 0, 150, label="10400114") +
+  labs(x='Days since clozapine start', y='LUNSERS score')
+```
+
+
+## Remove outlier
+```{r}
+# 그런데 10400114  환자는 너무 LUNSERS score가 높아 빼는 것이 좋을 것 같다.
+
+data_outlier_removed <- data %>% filter(hosp_id != 10400114)
+```
+
+# Save the data
+```{r}
+
+saveRDS(data_outlier_removed, paste0(here(), "/data/data.rds"))
+```
+
+```{r}
+library(here)
+here()
+```
+
+

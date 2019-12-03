@@ -1,0 +1,86 @@
+---
+title: "Basic analysis of data characteristics"
+output: html_notebook
+---
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(glue)
+  library(moonBook)
+  library(anselmEDA)
+  library(here)
+  library(patchwork)
+  library(knitr)
+  library(ggsci)
+  library(lemon)
+})
+
+theme_set(theme_bw())
+```
+
+# Load data
+```{r}
+data <- readRDS(paste0(here(), "/data/data.rds"))
+```
+
+# Demographic analysis
+
+## OCIR에 따른 OCD 의심환자 구분 (추적기간 동안 한번이라도 cutoff=21를 넘기면 has_OCD=TRUE)
+## LUNSERS에 따른 side-effect 환자 구분 (추적기간 동안 한번이라도 cutoff=26을 넘기면 has_SE=TRUE)()
+```{r}
+data <- data %>%
+  group_by(hosp_id) %>%
+  mutate(has_OCD = factor(max(OCI_total) >= 21, levels = c(FALSE, TRUE), labels = c("no OCD", "has OCD"))) %>%
+  mutate(high_SE = factor(max(LUN_score) >= 59, levels = c(FALSE, TRUE), labels = c("low SE", "high SE"))) %>%
+  ungroup()
+```
+
+```{r}
+demographic <- data %>% distinct(hosp_id, measure_point, .keep_all = T) %>% 
+  select(hosp_id:dom, cloz_ever, mood_stabilizer_ever, antidepressant_ever, has_OCD, high_SE, -cloz_use)
+```
+
+```{r}
+mytable(sex~.-hosp_id, demographic, show.total=T)
+```
+
+```{r, fig.height=5}
+demographic %>% convert_df_factor %>% plot_fct_distribution
+```
+
+
+# repeated measure와 관계된 통계들
+
+## 측정 시점에 관련된 통계
+
+```{r}
+p1 <- data %>% ggplot(aes(measure_point)) + geom_histogram(color='white', binwidth=100) +
+  labs(x="Days since clozapine start", subtitle = 'Histogram')
+p2 <- data %>% ggplot(aes(measure_point)) + stat_ecdf() + 
+  labs(x="Days since clozapine start", subtitle = 'Cumulative histogram')
+p1 + p2
+```
+## 측정횟수의 분포
+
+```{r}
+data %>% group_by(hosp_id) %>% summarize(measure_no=n()) %>% count(measure_no) %>% kable
+data %>% group_by(hosp_id) %>% summarize(measure_no=n()) %>% ggplot(aes(measure_no)) + geom_histogram(binwidth = 1, color='white') +
+  xlab("Number of repeated measurements") + scale_x_continuous(breaks = 1:7)
+```
+
+
+## 총 측정기간의 분포
+```{r}
+data %>% group_by(hosp_id) %>% summarize(measure_duration=max(measure_point)-min(measure_point)) %>% 
+  ggplot(aes(measure_duration)) + geom_histogram(color='white', binwidth = 100) + xlab("Total F/U period")
+```
+
+## 측정 interval의 분포
+```{r}
+data %>% group_by(hosp_id) %>% arrange(measure_point) %>% mutate(interval = c(NA, diff(measure_point))) %>% ggplot(aes(interval)) + geom_histogram(binwidth = 50, color="white") +
+  xlab("Interval of F/U measurement")
+```
+
+
+
