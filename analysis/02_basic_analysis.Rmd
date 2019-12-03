@@ -1,5 +1,5 @@
 ---
-title: "Basic analysis of data characteristics"
+title: "Basic analysis"
 output: html_notebook
 ---
 

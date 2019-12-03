@@ -1,5 +1,5 @@
 ---
-title: "Temporal change of OCIR total and subscores"
+title: "Temporal change of OCIR scores"
 output: html_notebook
 ---
 

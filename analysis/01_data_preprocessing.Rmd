@@ -1,5 +1,5 @@
 ---
-title: "Data Pre-processign"
+title: "Data Pre-processing"
 output:
   html_document:
     df_print: paged

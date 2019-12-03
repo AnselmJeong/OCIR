@@ -1,5 +1,5 @@
 ---
-title: "Temporal change of LUNSERS"
+title: "Temporal change of LUNSERS scores"
 output: html_notebook
 ---
 
