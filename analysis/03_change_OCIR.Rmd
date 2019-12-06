@@ -22,12 +22,6 @@ theme_set(theme_bw())
 # Load data
 ```{r}
 data <- readRDS(paste0(here(), "/data/data.rds"))
-
-data <- data %>%
-  group_by(hosp_id) %>%
-  mutate(has_OCD = factor(max(OCI_total) >= 21, levels = c(FALSE, TRUE), labels = c("no OCD", "has OCD"))) %>%
-  mutate(high_SE = factor(max(LUN_score) >= 59, levels = c(FALSE, TRUE), labels = c("low SE", "high SE"))) %>%
-  ungroup()
 ```
 
 

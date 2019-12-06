@@ -25,6 +25,8 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -358,7 +360,13 @@ div.tocify {
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/AnselmJeong/OCIR">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
       </ul>
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -382,7 +390,7 @@ div.section {
 
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
-<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
 </button>
 </p>
 <div id="workflowr-report" class="collapse">
@@ -391,7 +399,7 @@ div.section {
 <a data-toggle="tab" href="#summary">Summary</a>
 </li>
 <li>
-<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
 </li>
 <li>
 <a data-toggle="tab" href="#versions">Past versions</a>
@@ -400,10 +408,10 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2019-12-03
+<strong>Last updated:</strong> 2019-12-06
 </p>
 <p>
-<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
 </p>
 <p>
 <strong>Knit directory:</strong> <code>wflow_OCIR/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
@@ -419,12 +427,12 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
 </p>
 </div>
-<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -491,10 +499,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrong3fd7e9d"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> 3fd7e9d </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomAnselmJeongOCIRtree722ef035a64ec5d3edf0ef25006561bc798620d2targetblank722ef03a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/AnselmJeong/OCIR/tree/722ef035a64ec5d3edf0ef25006561bc798620d2" target="_blank">722ef03</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrong3fd7e9d" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomAnselmJeongOCIRtree722ef035a64ec5d3edf0ef25006561bc798620d2targetblank722ef03a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -508,11 +516,25 @@ Ignored files:
     Ignored:    analysis/03_change_OCIR.nb.html
     Ignored:    analysis/04_change_LUNSERS.nb.html
     Ignored:    analysis/05_change_PANSS.nb.html
+    Ignored:    analysis/06_interrelation.nb.html
+    Ignored:    analysis/07_LME_modeling.nb.html
+    Ignored:    analysis/08_bnlearn_modeling.nb.html
+    Ignored:    analysis/figure/
 
 Untracked files:
+    Untracked:  06_interrelation.Rmd
+    Untracked:  06_interrelation.nb.html
+    Untracked:  analysis/06_interrelation.Rmd
+    Untracked:  analysis/07_LME_modeling.Rmd
+    Untracked:  analysis/08_bnlearn_modeling.Rmd
     Untracked:  data/data.csv
     Untracked:  data/data.rds
+    Untracked:  data/data_transformed.rds
     Untracked:  data/ocir_raw_data.csv
+
+Unstaged changes:
+    Modified:   analysis/01_data_preprocessing.Rmd
+    Modified:   analysis/03_change_OCIR.Rmd
 
 </code></pre>
 <p>
@@ -537,33 +559,37 @@ There are no past versions. Publish this analysis with <code>wflow_publish()</co
   library(lemon)
   library(here)
   library(visdat)
+  library(anselmEDA)
 })
 
 theme_set(theme_bw())</code></pre>
-<div id="load-data-and-preprocess" class="section level1">
-<h1>Load data and Preprocess</h1>
+<div id="load-data" class="section level1">
+<h1>Load data</h1>
 <pre class="r"><code>data_path &lt;- paste0(here(), &quot;/data/data.csv&quot;)
 data_original &lt;- read_csv(data_path, 
-                 col_types = cols(age = col_integer(), 
+                 col_types = cols(age = col_double(), 
                                   sex = col_factor(levels = c(&quot;M&quot;, &quot;F&quot;)), 
-                                  IQ = col_integer(), 
+                                  IQ = col_double(), 
                                   edu = col_integer(), 
                                   marriage = col_integer(), 
                                   job = col_integer(), 
                                   cloz_use = col_integer(),
-                                  doi = col_integer(), 
-                                  dom = col_integer(), 
+                                  doi = col_double(), 
+                                  dom = col_double(), 
                                   measure_at = col_date(format = &quot;%m/%d/%Y&quot;)))</code></pre>
-<div id="eliminate-duplicated-rows" class="section level2">
-<h2>Eliminate duplicated rows</h2>
+</div>
+<div id="basic-preprocessing" class="section level1">
+<h1>Basic preprocessing</h1>
+<div id="eliminate-duplicated-rows" class="section level3">
+<h3>Eliminate duplicated rows</h3>
 <pre class="r"><code>nrow(data_original)</code></pre>
 <pre><code>[1] 492</code></pre>
 <pre class="r"><code>data_unique &lt;- data_original %&gt;% distinct(hosp_id, measure_at, .keep_all = T)
 nrow(data_unique)</code></pre>
 <pre><code>[1] 300</code></pre>
 </div>
-<div id="unify-demographic-data" class="section level2">
-<h2>Unify demographic data</h2>
+<div id="unify-demographic-data" class="section level3">
+<h3>Unify demographic data</h3>
 <pre class="r"><code>data_unique &lt;- data_unique %&gt;%
   group_by(hosp_id) %&gt;% 
   arrange(measure_at) %&gt;% 
@@ -575,8 +601,8 @@ nrow(data_unique)</code></pre>
          antidepressant_ever=as.numeric(any(!is.na(antidepressant)))
          )</code></pre>
 </div>
-<div id="calculate-the-time-of-measurement-based-on-clozapine-start-date" class="section level2">
-<h2>Calculate the time of measurement based on clozapine start date</h2>
+<div id="calculate-the-time-of-measurement-based-on-clozapine-start-date" class="section level3">
+<h3>Calculate the time of measurement based on clozapine start date</h3>
 <ul>
 <li>만약 clozapine 사용 시작 이전에 측정값이 있었다면, 이들은 negative value를 갖게 된다.</li>
 </ul>
@@ -587,29 +613,118 @@ nrow(data_unique)</code></pre>
   mutate(measure_point = as.numeric(measure_at - clozapine_start)) %&gt;% 
   drop_na(measure_point) %&gt;% ungroup</code></pre>
 </div>
-<div id="visualization-of-missing-data" class="section level2">
-<h2>Visualization of missing data</h2>
+</div>
+<div id="missing-data-processing" class="section level1">
+<h1>Missing data processing</h1>
+<div id="visualization-of-missing-data" class="section level3">
+<h3>Visualization of missing data</h3>
 <pre class="r"><code>(data %&gt;% select(-hosp_id, -age, -sex, -ends_with(&#39;ever&#39;)) %&gt;% vis_miss) + coord_flip()</code></pre>
 <p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+<div id="remove-outlier" class="section level1">
+<h1>Remove outlier</h1>
 <pre class="r"><code>data %&gt;% ggplot(aes(measure_point, LUN_score, group=hosp_id)) +
-  geom_pointline(size=2) + annotate(&#39;text&#39;, 0, 150, label=&quot;10400114&quot;) +
+  geom_pointline(size=2) + annotate(&#39;text&#39;, 0, 145, label=&quot;10400114&quot;) +
   labs(x=&#39;Days since clozapine start&#39;, y=&#39;LUNSERS score&#39;)</code></pre>
 <pre><code>Warning: Removed 40 rows containing missing values (geom_point_line).</code></pre>
-<p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /> * 그런데 10400114 환자는 너무 LUNSERS score가 높아 빼는 것이 좋을 것 같다.</p>
+<pre class="r"><code>data &lt;- data %&gt;% filter(hosp_id != 10400114)</code></pre>
 </div>
-<div id="remove-outlier" class="section level2">
-<h2>Remove outlier</h2>
-<pre class="r"><code># 그런데 10400114  환자는 너무 LUNSERS score가 높아 빼는 것이 좋을 것 같다.
+<div id="check-normal-distribution" class="section level1">
+<h1>Check normal distribution</h1>
+<div id="distribution-of-demographic-data" class="section level2">
+<h2>Distribution of demographic data</h2>
+<pre class="r"><code>data_demo &lt;- data %&gt;% select(age, IQ, doi, dom)
+plot_densities(data_demo) + labs(subtitle = &quot;raw data&quot;)</code></pre>
+<pre><code>Warning: Removed 33 rows containing non-finite values (stat_density).</code></pre>
+<pre><code>Warning: Removed 33 rows containing non-finite values (stat_fitdistr).</code></pre>
+<p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_densities(data_demo, transform = log1p) + labs(subtitle = &quot;log transformed&quot;)</code></pre>
+<pre><code>Warning: Removed 33 rows containing non-finite values (stat_density).
 
-data_outlier_removed &lt;- data %&gt;% filter(hosp_id != 10400114)</code></pre>
+Warning: Removed 33 rows containing non-finite values (stat_fitdistr).</code></pre>
+<p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" /></p>
+<ul>
+<li>demogrpahic variable들은 굳이 log transformation 안 해도 될 듯</li>
+</ul>
+<div id="distribution-of-oci" class="section level3">
+<h3>Distribution of OCI</h3>
+<pre class="r"><code>data_OCI &lt;- data %&gt;% select(starts_with(&quot;OCI&quot;))
+plot_densities(data_OCI) + labs(subtitle = &quot;raw data&quot;)</code></pre>
+<p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_densities(data_OCI, transform = log1p) + labs(subtitle = &quot;log transformed&quot;)</code></pre>
+<p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /> * OCI의 각 subscale들은 대부분 낮은 점수라 사용하기가 애매하고, OCI_total을 log transformation해서 사용하는 것이 그래도 무난함…</p>
+</div>
+<div id="distribution-of-hpsvq" class="section level3">
+<h3>Distribution of HPSVQ</h3>
+<pre class="r"><code>data_HPSVQ &lt;- data %&gt;% select(starts_with(&quot;HP&quot;))
+plot_densities(data_HPSVQ) + labs(subtitle = &quot;raw data&quot;)</code></pre>
+<pre><code>Warning: Removed 33 rows containing non-finite values (stat_density).</code></pre>
+<pre><code>Warning: Removed 33 rows containing non-finite values (stat_fitdistr).</code></pre>
+<p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_densities(data_HPSVQ, transform = log1p) + labs(subtitle = &quot;log transformed&quot;)</code></pre>
+<pre><code>Warning: Removed 33 rows containing non-finite values (stat_density).
+
+Warning: Removed 33 rows containing non-finite values (stat_fitdistr).</code></pre>
+<p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
+<ul>
+<li>log 변환이 무난하기는 한데, 대체로 bimodal한 분포</li>
+</ul>
+</div>
+<div id="distribution-of-lunsers" class="section level3">
+<h3>Distribution of LUNSERS</h3>
+<pre class="r"><code>data_LUNSERS &lt;- data %&gt;% select(EPS:LUN_score)
+plot_densities(data_LUNSERS) + labs(subtitle = &quot;raw data&quot;)</code></pre>
+<pre><code>Warning: Removed 430 rows containing non-finite values (stat_density).</code></pre>
+<pre><code>Warning: Removed 430 rows containing non-finite values (stat_fitdistr).</code></pre>
+<p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_densities(data_LUNSERS, transform = log1p) + labs(subtitle = &quot;log transformed&quot;)</code></pre>
+<pre><code>Warning: Removed 430 rows containing non-finite values (stat_density).
+
+Warning: Removed 430 rows containing non-finite values (stat_fitdistr).</code></pre>
+<p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;" /></p>
+<ul>
+<li>log 변환이 매우 잘 들어맞음</li>
+</ul>
+</div>
+<div id="distribution-of-panss" class="section level3">
+<h3>Distribution of PANSS</h3>
+<pre class="r"><code>data_PANSS &lt;- data %&gt;% select(starts_with(&#39;PANSS&#39;), starts_with(&#39;HW&#39;))
+plot_densities(data_PANSS) + labs(subtitle = &quot;raw data&quot;)</code></pre>
+<pre><code>Warning: Removed 36 rows containing non-finite values (stat_density).</code></pre>
+<pre><code>Warning: Removed 36 rows containing non-finite values (stat_fitdistr).</code></pre>
+<p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plot_densities(data_PANSS, transform = log1p) + labs(subtitle = &quot;log transformed&quot;)</code></pre>
+<pre><code>Warning: Removed 36 rows containing non-finite values (stat_density).
+
+Warning: Removed 36 rows containing non-finite values (stat_fitdistr).</code></pre>
+<p><img src="figure/01_data_preprocessing.Rmd/unnamed-chunk-13-2.png" width="672" style="display: block; margin: auto;" /></p>
+<ul>
+<li>PANSS 자료는 굳이 변환시키지 않아도 정규분포함</li>
+</ul>
 </div>
 </div>
-<div id="save-the-data" class="section level1">
-<h1>Save the data</h1>
-<pre class="r"><code>saveRDS(data_outlier_removed, paste0(here(), &quot;/data/data.rds&quot;))</code></pre>
-<pre class="r"><code>library(here)
-here()</code></pre>
-<pre><code>[1] &quot;D:/OneDrive - eulji.ac.kr/_RESEARCH_/wflow_OCIR&quot;</code></pre>
+</div>
+<div id="transform-and-save-the-data" class="section level1">
+<h1>Transform and Save the data</h1>
+<ul>
+<li><p>OCI, HPSVQ, LUNSERS를 log(x+1)로 변환시켜 저장</p></li>
+<li><p>OCD(+/-): cutoff &gt;= 21</p></li>
+<li><p>high/low Side effect: cutoff &gt;= 59</p></li>
+</ul>
+<pre class="r"><code>data &lt;- data %&gt;%
+  group_by(hosp_id) %&gt;%
+  mutate(has_OCD = factor(max(OCI_total) &gt;= log1p(21), levels = c(FALSE, TRUE), labels = c(&quot;no OCD&quot;, &quot;has OCD&quot;))) %&gt;%
+  mutate(high_SE = factor(max(LUN_score) &gt;= log1p(59), levels = c(FALSE, TRUE), labels = c(&quot;low SE&quot;, &quot;high SE&quot;))) %&gt;%
+  ungroup()
+
+data_transformed &lt;- data %&gt;% 
+  mutate_at(vars(starts_with(&quot;OCI&quot;), EPS:LUN_score), log1p) %&gt;% 
+  mutate_at(vars(age, starts_with(&quot;PANSS&quot;)), scale)
+
+saveRDS(data, paste0(here(), &quot;/data/data.rds&quot;))
+saveRDS(data_transformed, paste0(here(), &quot;/data/data_transformed.rds&quot;))</code></pre>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -635,27 +750,63 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] visdat_0.5.3    here_0.1        lemon_0.4.3     forcats_0.4.0  
- [5] stringr_1.4.0   dplyr_0.8.3     purrr_0.3.3     readr_1.3.1    
- [9] tidyr_1.0.0     tibble_2.1.3    ggplot2_3.2.1   tidyverse_1.3.0
+ [1] anselmEDA_0.1.0 visdat_0.5.3    here_0.1        lemon_0.4.3    
+ [5] forcats_0.4.0   stringr_1.4.0   dplyr_0.8.3     purrr_0.3.3    
+ [9] readr_1.3.1     tidyr_1.0.0     tibble_2.1.3    ggplot2_3.2.1  
+[13] tidyverse_1.3.0
 
 loaded via a namespace (and not attached):
- [1] tidyselect_0.2.5 xfun_0.11        haven_2.2.0      lattice_0.20-38 
- [5] colorspace_1.4-1 vctrs_0.2.0      generics_0.0.2   htmltools_0.4.0 
- [9] yaml_2.2.0       rlang_0.4.1      later_1.0.0      pillar_1.4.2    
-[13] withr_2.1.2      glue_1.3.1       DBI_1.0.0        dbplyr_1.4.2    
-[17] modelr_0.1.5     readxl_1.3.1     plyr_1.8.4       lifecycle_0.1.0 
-[21] munsell_0.5.0    gtable_0.3.0     workflowr_1.5.0  cellranger_1.1.0
-[25] rvest_0.3.5      evaluate_0.14    labeling_0.3     knitr_1.26      
-[29] httpuv_1.5.2     broom_0.5.2      Rcpp_1.0.3       promises_1.1.0  
-[33] backports_1.1.5  scales_1.0.0     jsonlite_1.6     fs_1.3.1        
-[37] gridExtra_2.3    hms_0.5.2        digest_0.6.22    stringi_1.4.3   
-[41] grid_3.6.1       rprojroot_1.3-2  cli_1.1.0        tools_3.6.1     
-[45] magrittr_1.5     lazyeval_0.2.2   crayon_1.3.4     pkgconfig_2.0.3 
-[49] zeallot_0.1.0    ellipsis_0.3.0   xml2_1.2.2       reprex_0.3.0    
-[53] lubridate_1.7.4  rstudioapi_0.10  assertthat_0.2.1 rmarkdown_1.18  
-[57] httr_1.4.1       R6_2.4.1         nlme_3.1-142     git2r_0.26.1    
-[61] compiler_3.6.1  </code></pre>
+  [1] proto_1.0.0         ggstance_0.3.3      tidyselect_0.2.5   
+  [4] lme4_1.1-21         RSQLite_2.1.4       htmlwidgets_1.5.1  
+  [7] grid_3.6.1          jtools_2.0.1        munsell_0.5.0      
+ [10] chron_2.3-54        smbinning_0.9       withr_2.1.2        
+ [13] colorspace_1.4-1    knitr_1.26          rstudioapi_0.10    
+ [16] ROCR_1.0-7          TTR_0.23-5          labeling_0.3       
+ [19] git2r_0.26.1        mnormt_1.5-5        ordinal_2019.4-25  
+ [22] polyclip_1.10-0     bit64_0.9-7         farver_2.0.1       
+ [25] rprojroot_1.3-2     vctrs_0.2.0         generics_0.0.2     
+ [28] xfun_0.11           R6_2.4.1            dlookr_0.3.12      
+ [31] bitops_1.0-6        assertthat_0.2.1    promises_1.1.0     
+ [34] scales_1.1.0        nnet_7.3-12         gtable_0.3.0       
+ [37] sandwich_2.5-1      workflowr_1.5.0     rlang_0.4.2        
+ [40] zeallot_0.1.0       splines_3.6.1       lazyeval_0.2.2     
+ [43] acepack_1.4.1       broom_0.5.2         mosaicCore_0.6.0   
+ [46] checkmate_1.9.4     yaml_2.2.0          abind_1.4-5        
+ [49] modelr_0.1.5        backports_1.1.5     httpuv_1.5.2       
+ [52] quantmod_0.4-15     Hmisc_4.3-0         inum_1.0-1         
+ [55] tools_3.6.1         tcltk_3.6.1         psych_1.8.12       
+ [58] ellipsis_0.3.0      gplots_3.0.1.1      kableExtra_1.1.0   
+ [61] RColorBrewer_1.1-2  ggformula_0.9.2     ggridges_0.5.1     
+ [64] gsubfn_0.7          Rcpp_1.0.3          plyr_1.8.4         
+ [67] base64enc_0.1-3     classInt_0.4-2      rpart_4.1-15       
+ [70] sqldf_0.4-11        zoo_1.8-6           haven_2.2.0        
+ [73] ggrepel_0.8.1       cluster_2.1.0       fs_1.3.1           
+ [76] tinytex_0.17        magrittr_1.5        data.table_1.12.6  
+ [79] openxlsx_4.1.3      reprex_0.3.0        mvtnorm_1.0-11     
+ [82] mitml_0.3-7         hms_0.5.2           RcmdrMisc_2.5-1    
+ [85] evaluate_0.14       xtable_1.8-4        DMwR_0.4.1         
+ [88] rio_0.5.16          readxl_1.3.1        gridExtra_2.3      
+ [91] compiler_3.6.1      mice_3.6.0          KernSmooth_2.23-16 
+ [94] crayon_1.3.4        minqa_1.2.4         htmltools_0.4.0    
+ [97] later_1.0.0         Formula_1.2-3       libcoin_1.0-5      
+[100] lubridate_1.7.4     DBI_1.0.0           tweenr_1.0.1       
+[103] corrplot_0.84       dbplyr_1.4.2        MASS_7.3-51.4      
+[106] boot_1.3-23         Matrix_1.2-18       car_3.0-5          
+[109] cli_1.1.0           gdata_2.18.0        parallel_3.6.1     
+[112] pan_1.6             pkgconfig_2.0.3     prettydoc_0.3.1    
+[115] numDeriv_2016.8-1.1 foreign_0.8-72      xml2_1.2.2         
+[118] webshot_0.5.2       rvest_0.3.5         digest_0.6.23      
+[121] rmarkdown_1.18      cellranger_1.1.0    htmlTable_1.13.3   
+[124] nortest_1.0-4       curl_4.3            gtools_3.8.1       
+[127] jomo_2.6-10         nloptr_1.2.1        lifecycle_0.1.0    
+[130] nlme_3.1-142        jsonlite_1.6        carData_3.0-3      
+[133] viridisLite_0.3.0   pillar_1.4.2        lattice_0.20-38    
+[136] httr_1.4.1          survival_3.1-8      glue_1.3.1         
+[139] xts_0.11-2          zip_2.0.4           pander_0.6.3       
+[142] bit_1.1-14          ggforce_0.3.1       class_7.3-15       
+[145] stringi_1.4.3       blob_1.2.0          moments_0.14       
+[148] partykit_1.2-5      latticeExtra_0.6-28 caTools_1.17.1.3   
+[151] memoise_1.1.0       ucminf_1.1-4        e1071_1.7-3        </code></pre>
 </div>
 </div>
 

@@ -11,35 +11,37 @@ suppressPackageStartupMessages({
   library(lemon)
   library(here)
   library(visdat)
+  library(anselmEDA)
 })
 
 theme_set(theme_bw())
 ```
 
-# Load data and Preprocess
+# Load data
 ```{r}
 data_path <- paste0(here(), "/data/data.csv")
 data_original <- read_csv(data_path, 
-                 col_types = cols(age = col_integer(), 
+                 col_types = cols(age = col_double(), 
                                   sex = col_factor(levels = c("M", "F")), 
-                                  IQ = col_integer(), 
+                                  IQ = col_double(), 
                                   edu = col_integer(), 
                                   marriage = col_integer(), 
                                   job = col_integer(), 
                                   cloz_use = col_integer(),
-                                  doi = col_integer(), 
-                                  dom = col_integer(), 
+                                  doi = col_double(), 
+                                  dom = col_double(), 
                                   measure_at = col_date(format = "%m/%d/%Y")))
 ```
 
-## Eliminate duplicated rows
+# Basic preprocessing
+### Eliminate duplicated rows
 ```{r}
 nrow(data_original)
 data_unique <- data_original %>% distinct(hosp_id, measure_at, .keep_all = T)
 nrow(data_unique)
 ```
 
-## Unify demographic data
+### Unify demographic data
 ```{r}
 data_unique <- data_unique %>%
   group_by(hosp_id) %>% 
@@ -54,7 +56,7 @@ data_unique <- data_unique %>%
 ```
 
 
-## Calculate the time of measurement based on clozapine start date
+### Calculate the time of measurement based on clozapine start date
 * 만약 clozapine 사용 시작 이전에 측정값이 있었다면, 이들은 negative value를 갖게 된다.
 
 ```{r}
@@ -66,36 +68,96 @@ data <- data_unique %>% group_by(hosp_id) %>%
   drop_na(measure_point) %>% ungroup
 ```
 
-## Visualization of missing data 
-```{r fig.width=7, fig.height=12}
+# Missing data processing
+
+### Visualization of missing data 
+```{r fig.width=7, fig.height=7}
 (data %>% select(-hosp_id, -age, -sex, -ends_with('ever')) %>% vis_miss) + coord_flip()
 ```
 
-
+# Remove outlier
 
 ```{r}
 data %>% ggplot(aes(measure_point, LUN_score, group=hosp_id)) +
-  geom_pointline(size=2) + annotate('text', 0, 150, label="10400114") +
+  geom_pointline(size=2) + annotate('text', 0, 145, label="10400114") +
   labs(x='Days since clozapine start', y='LUNSERS score')
 ```
-
-
-## Remove outlier
-```{r}
-# 그런데 10400114  환자는 너무 LUNSERS score가 높아 빼는 것이 좋을 것 같다.
-
-data_outlier_removed <- data %>% filter(hosp_id != 10400114)
-```
-
-# Save the data
-```{r}
-
-saveRDS(data_outlier_removed, paste0(here(), "/data/data.rds"))
-```
+* 그런데 10400114  환자는 너무 LUNSERS score가 높아 빼는 것이 좋을 것 같다.
 
 ```{r}
-library(here)
-here()
+data <- data %>% filter(hosp_id != 10400114)
 ```
+
+# Check normal distribution
+
+## Distribution of demographic data
+```{r}
+data_demo <- data %>% select(age, IQ, doi, dom)
+plot_densities(data_demo) + labs(subtitle = "raw data")
+plot_densities(data_demo, transform = log1p) + labs(subtitle = "log transformed")
+```
+
+* demogrpahic variable들은 굳이 log transformation 안 해도 될 듯
+
+### Distribution of OCI
+```{r}
+data_OCI <- data %>% select(starts_with("OCI"))
+plot_densities(data_OCI) + labs(subtitle = "raw data")
+plot_densities(data_OCI, transform = log1p) + labs(subtitle = "log transformed")
+```
+* OCI의 각 subscale들은 대부분 낮은 점수라 사용하기가 애매하고, OCI_total을 log transformation해서 사용하는 것이 그래도 무난함...
+
+### Distribution of HPSVQ
+```{r}
+data_HPSVQ <- data %>% select(starts_with("HP"))
+plot_densities(data_HPSVQ) + labs(subtitle = "raw data")
+plot_densities(data_HPSVQ, transform = log1p) + labs(subtitle = "log transformed")
+```
+
+* log 변환이 무난하기는 한데, 대체로 bimodal한 분포
+
+### Distribution of LUNSERS
+```{r}
+data_LUNSERS <- data %>% select(EPS:LUN_score)
+plot_densities(data_LUNSERS) + labs(subtitle = "raw data")
+plot_densities(data_LUNSERS, transform = log1p) + labs(subtitle = "log transformed")
+```
+
+* log 변환이 매우 잘 들어맞음
+
+### Distribution of PANSS
+```{r}
+data_PANSS <- data %>% select(starts_with('PANSS'), starts_with('HW'))
+plot_densities(data_PANSS) + labs(subtitle = "raw data")
+plot_densities(data_PANSS, transform = log1p) + labs(subtitle = "log transformed")
+```
+
+* PANSS 자료는 굳이 변환시키지 않아도 정규분포함
+
+
+
+# Transform and Save the data
+
+* OCI, HPSVQ, LUNSERS를 log(x+1)로 변환시켜 저장 
+
+* OCD(+/-): cutoff >= 21
+* high/low Side effect: cutoff >= 59
+
+```{r}
+
+data <- data %>%
+  group_by(hosp_id) %>%
+  mutate(has_OCD = factor(max(OCI_total) >= log1p(21), levels = c(FALSE, TRUE), labels = c("no OCD", "has OCD"))) %>%
+  mutate(high_SE = factor(max(LUN_score) >= log1p(59), levels = c(FALSE, TRUE), labels = c("low SE", "high SE"))) %>%
+  ungroup()
+
+data_transformed <- data %>% 
+  mutate_at(vars(starts_with("OCI"), EPS:LUN_score), log1p) %>% 
+  mutate_at(vars(age, starts_with("PANSS")), scale)
+
+saveRDS(data, paste0(here(), "/data/data.rds"))
+saveRDS(data_transformed, paste0(here(), "/data/data_transformed.rds"))
+```
+
 
 

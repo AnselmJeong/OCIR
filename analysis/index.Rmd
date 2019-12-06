@@ -17,3 +17,6 @@ editor_options:
 ### [03. Temporal change of OCIR](03_change_OCIR.html)
 ### [04. Temporal change of LUNSERS](04_change_LUNSERS.html)
 ### [05. Temporal change of PANSS](05_change_PANSS.html)
+### [06. Interrelation among variables](06_interrelation.html)
+### [07. LME modeling](07_LME_modeling.html)
+### [08. bnlearn modeling](08_bnlearn_modeling.html)
