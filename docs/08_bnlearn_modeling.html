@@ -503,10 +503,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomAnselmJeongOCIRtree6080d46e8a01b4c3c311b86c023fee57aa3c4c8btargetblank6080d46a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/AnselmJeong/OCIR/tree/6080d46e8a01b4c3c311b86c023fee57aa3c4c8b" target="_blank">6080d46</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcomAnselmJeongOCIRtree1ec3fb828de7595acbf2d401998803f33eaf6015targetblank1ec3fb8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/AnselmJeong/OCIR/tree/1ec3fb828de7595acbf2d401998803f33eaf6015" target="_blank">1ec3fb8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcomAnselmJeongOCIRtree6080d46e8a01b4c3c311b86c023fee57aa3c4c8btargetblank6080d46a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcomAnselmJeongOCIRtree1ec3fb828de7595acbf2d401998803f33eaf6015targetblank1ec3fb8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -562,6 +562,7 @@ There are no past versions. Publish this analysis with <code>wflow_publish()</co
   library(tidygraph)
   library(ggraph)
   library(extrafont)
+  library(lavaan)
 })
 
 set_graph_style()</code></pre>
@@ -587,8 +588,163 @@ data &lt;- readRDS(paste0(here(), &quot;/data/data.rds&quot;))</code></pre>
 <pre><code>
 Mounting a PA input model...</code></pre>
 <pre class="r"><code>summary(net1$lv_fit, fit.measure=T)</code></pre>
-<pre><code>Length  Class   Mode 
-     1 lavaan     S4 </code></pre>
+<pre><code>lavaan 0.6-5 ended normally after 136 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of free parameters                         63
+                                                      
+  Number of observations                           243
+                                                      
+Model Test User Model:
+                                              Standard      Robust
+  Test Statistic                               310.389     296.852
+  Degrees of freedom                               141         141
+  P-value (Chi-square)                           0.000       0.000
+  Scaling correction factor                                  1.046
+    for the Yuan-Bentler correction (Mplus variant) 
+
+Model Test Baseline Model:
+
+  Test statistic                              2979.025    2715.158
+  Degrees of freedom                               187         187
+  P-value                                        0.000       0.000
+  Scaling correction factor                                  1.097
+
+User Model versus Baseline Model:
+
+  Comparative Fit Index (CFI)                    0.939       0.938
+  Tucker-Lewis Index (TLI)                       0.920       0.918
+                                                                  
+  Robust Comparative Fit Index (CFI)                         0.941
+  Robust Tucker-Lewis Index (TLI)                            0.922
+
+Loglikelihood and Information Criteria:
+
+  Loglikelihood user model (H0)              -1928.976   -1928.976
+  Scaling correction factor                                  1.174
+      for the MLR correction                                      
+  Loglikelihood unrestricted model (H1)      -1773.782   -1773.782
+  Scaling correction factor                                  1.085
+      for the MLR correction                                      
+                                                                  
+  Akaike (AIC)                                3983.952    3983.952
+  Bayesian (BIC)                              4204.015    4204.015
+  Sample-size adjusted Bayesian (BIC)         4004.314    4004.314
+
+Root Mean Square Error of Approximation:
+
+  RMSEA                                          0.070       0.067
+  90 Percent confidence interval - lower         0.060       0.057
+  90 Percent confidence interval - upper         0.081       0.078
+  P-value RMSEA &lt;= 0.05                          0.001       0.004
+                                                                  
+  Robust RMSEA                                               0.069
+  90 Percent confidence interval - lower                     0.058
+  90 Percent confidence interval - upper                     0.080
+
+Standardized Root Mean Square Residual:
+
+  SRMR                                           0.086       0.086
+
+Parameter Estimates:
+
+  Information                                      Observed
+  Observed information based on                     Hessian
+  Standard errors                        Robust.huber.white
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  OCI_hoard ~                                         
+    OCI_chck  (c1)    0.531    0.048   11.049    0.000
+  OCI_neutr ~                                         
+    OCI_chck  (c2)    0.192    0.064    2.983    0.003
+    OCI_hord  (c3)    0.195    0.085    2.280    0.023
+    OCI_ordr  (c4)    0.301    0.068    4.455    0.000
+    OCI_obse  (c5)    0.138    0.042    3.316    0.001
+  OCI_order ~                                         
+    OCI_hord  (c6)    0.775    0.045   17.115    0.000
+  OCI_wash ~                                          
+    OCI_netr  (c7)    0.329    0.084    3.901    0.000
+    OCI_ordr  (c8)    0.251    0.068    3.671    0.000
+    OCI_obse  (c9)    0.155    0.043    3.578    0.000
+    hormonal (c10)    0.340    0.161    2.107    0.035
+  OCI_obse ~                                          
+    OCI_chck (c11)    0.679    0.054   12.678    0.000
+  EPS ~                                               
+    OCI_chck (c12)    0.096    0.025    3.851    0.000
+    OCI_obse (c13)    0.151    0.020    7.347    0.000
+    age      (c14)   -0.044    0.012   -3.671    0.000
+  antichol ~                                          
+    EPS      (c15)    0.401    0.065    6.185    0.000
+    RH       (c16)    0.426    0.089    4.817    0.000
+  autonomic ~                                         
+    psychic  (c17)    0.400    0.053    7.570    0.000
+    RH       (c18)    0.409    0.087    4.686    0.000
+  allergic ~                                          
+    EPS      (c19)    0.346    0.080    4.322    0.000
+    RH       (c20)    0.267    0.087    3.058    0.002
+    HP_emo   (c21)   -0.009    0.003   -2.635    0.008
+  psychic ~                                           
+    OCI_obse (c22)    0.088    0.020    4.276    0.000
+    age      (c23)   -0.042    0.011   -3.667    0.000
+    EPS      (c24)    0.705    0.056   12.508    0.000
+  hormonal ~                                          
+    EPS      (c25)    0.269    0.056    4.761    0.000
+    autonomc (c26)    0.180    0.056    3.202    0.001
+  miscellany ~                                        
+    EPS      (c27)    0.253    0.058    4.353    0.000
+    autonomc (c28)    0.221    0.059    3.764    0.000
+    psychic  (c29)    0.147    0.052    2.809    0.005
+  RH ~                                                
+    EPS      (c30)    0.575    0.039   14.719    0.000
+  PANSS_pos ~                                         
+    HP_phy   (c31)    0.065    0.012    5.574    0.000
+  PANSS_neg ~                                         
+    PANSS_gn (c32)    0.555    0.063    8.800    0.000
+  PANSS_gen ~                                         
+    age      (c33)   -0.098    0.045   -2.183    0.029
+    EPS      (c34)    0.441    0.156    2.824    0.005
+    PANSS_ps (c35)    0.723    0.047   15.521    0.000
+  HP_phy ~                                            
+    HP_emo   (c36)    1.057    0.046   23.229    0.000
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+ .OCI_wash ~~                                         
+   .antichol          0.003    0.005    0.475    0.634
+   .allergic          0.013    0.007    1.873    0.061
+   .miscellany       -0.008    0.005   -1.512    0.131
+   .PANSS_neg         0.044    0.023    1.919    0.055
+ .antichol ~~                                         
+   .allergic          0.002    0.002    0.943    0.346
+   .miscellany        0.001    0.002    0.499    0.618
+   .PANSS_neg        -0.014    0.010   -1.470    0.142
+ .allergic ~~                                         
+   .miscellany       -0.002    0.002   -0.738    0.461
+   .PANSS_neg         0.003    0.009    0.318    0.750
+ .miscellany ~~                                       
+   .PANSS_neg        -0.011    0.009   -1.247    0.212
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+   .OCI_hoard         0.242    0.023   10.578    0.000
+   .OCI_neutr         0.213    0.026    8.299    0.000
+   .OCI_order         0.250    0.022   11.465    0.000
+   .OCI_wash          0.240    0.024    9.922    0.000
+   .OCI_obse          0.494    0.040   12.319    0.000
+   .EPS               0.046    0.005    9.966    0.000
+   .antichol          0.034    0.004    9.437    0.000
+   .autonomic         0.046    0.004   11.699    0.000
+   .allergic          0.034    0.004    8.759    0.000
+   .psychic           0.040    0.003   11.597    0.000
+   .hormonal          0.034    0.004    8.932    0.000
+   .miscellany        0.029    0.003   10.532    0.000
+   .RH                0.025    0.003    9.150    0.000
+   .PANSS_pos         0.899    0.135    6.645    0.000
+   .PANSS_neg         0.669    0.076    8.798    0.000
+   .PANSS_gen         0.412    0.038   10.769    0.000
+   .HP_phy           10.511    1.267    8.295    0.000</code></pre>
 <pre class="r"><code>net1$fit_plot</code></pre>
 <div id="htmlwidget-c3d38eaabbd6de0ca2e6" style="width:672px;height:480px;" class="grViz html-widget"></div>
 <script type="application/json" data-for="htmlwidget-c3d38eaabbd6de0ca2e6">{"x":{"diagram":" digraph fit { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n OCI_check; OCI_hoard; OCI_order; OCI_obse; OCI_neutr; hormonal; age; EPS; RH; psychic; HP_emo; autonomic; HP_phy; PANSS_gen; PANSS_pos; OCI_wash; antichol; allergic; miscellany; PANSS_neg \n node [shape = oval] \n  \n \n edge [ color = black ] \n OCI_check->OCI_hoard [label = \"0.53***\"] OCI_check->OCI_neutr [label = \"0.19**\"] OCI_hoard->OCI_neutr [label = \"0.19*\"] OCI_order->OCI_neutr [label = \"0.3***\"] OCI_obse->OCI_neutr [label = \"0.14***\"] OCI_hoard->OCI_order [label = \"0.78***\"] OCI_neutr->OCI_wash [label = \"0.33***\"] OCI_order->OCI_wash [label = \"0.25***\"] OCI_obse->OCI_wash [label = \"0.16***\"] hormonal->OCI_wash [label = \"0.34*\"] OCI_check->OCI_obse [label = \"0.68***\"] OCI_check->EPS [label = \"0.1***\"] OCI_obse->EPS [label = \"0.15***\"] age->EPS [label = \"-0.04***\"] EPS->antichol [label = \"0.4***\"] RH->antichol [label = \"0.43***\"] psychic->autonomic [label = \"0.4***\"] RH->autonomic [label = \"0.41***\"] EPS->allergic [label = \"0.35***\"] RH->allergic [label = \"0.27**\"] HP_emo->allergic [label = \"-0.01**\"] OCI_obse->psychic [label = \"0.09***\"] age->psychic [label = \"-0.04***\"] EPS->psychic [label = \"0.7***\"] EPS->hormonal [label = \"0.27***\"] autonomic->hormonal [label = \"0.18**\"] EPS->miscellany [label = \"0.25***\"] autonomic->miscellany [label = \"0.22***\"] psychic->miscellany [label = \"0.15**\"] EPS->RH [label = \"0.57***\"] HP_phy->PANSS_pos [label = \"0.06***\"] PANSS_gen->PANSS_neg [label = \"0.56***\"] age->PANSS_gen [label = \"-0.1*\"] EPS->PANSS_gen [label = \"0.44**\"] PANSS_pos->PANSS_gen [label = \"0.72***\"] HP_emo->HP_phy [label = \"1.06***\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
@@ -623,8 +779,148 @@ data_delta &lt;- data %&gt;% select(
 <pre><code>
 Mounting a PA input model...</code></pre>
 <pre class="r"><code>summary(net2$lv_fit, fit.measure=T)</code></pre>
-<pre><code>Length  Class   Mode 
-     1 lavaan     S4 </code></pre>
+<pre><code>lavaan 0.6-5 ended normally after 68 iterations
+
+  Estimator                                         ML
+  Optimization method                           NLMINB
+  Number of free parameters                         49
+                                                      
+  Number of observations                           153
+                                                      
+Model Test User Model:
+                                              Standard      Robust
+  Test Statistic                               169.047     148.311
+  Degrees of freedom                               119         119
+  P-value (Chi-square)                           0.002       0.035
+  Scaling correction factor                                  1.140
+    for the Yuan-Bentler correction (Mplus variant) 
+
+Model Test Baseline Model:
+
+  Test statistic                              1270.336    1109.392
+  Degrees of freedom                               152         152
+  P-value                                        0.000       0.000
+  Scaling correction factor                                  1.145
+
+User Model versus Baseline Model:
+
+  Comparative Fit Index (CFI)                    0.955       0.969
+  Tucker-Lewis Index (TLI)                       0.943       0.961
+                                                                  
+  Robust Comparative Fit Index (CFI)                         0.970
+  Robust Tucker-Lewis Index (TLI)                            0.961
+
+Loglikelihood and Information Criteria:
+
+  Loglikelihood user model (H0)              -5656.363   -5656.363
+  Scaling correction factor                                  1.777
+      for the MLR correction                                      
+  Loglikelihood unrestricted model (H1)      -5571.840   -5571.840
+  Scaling correction factor                                  1.326
+      for the MLR correction                                      
+                                                                  
+  Akaike (AIC)                               11410.726   11410.726
+  Bayesian (BIC)                             11559.218   11559.218
+  Sample-size adjusted Bayesian (BIC)        11404.130   11404.130
+
+Root Mean Square Error of Approximation:
+
+  RMSEA                                          0.052       0.040
+  90 Percent confidence interval - lower         0.033       0.014
+  90 Percent confidence interval - upper         0.070       0.058
+  P-value RMSEA &lt;= 0.05                          0.398       0.798
+                                                                  
+  Robust RMSEA                                               0.043
+  90 Percent confidence interval - lower                     0.012
+  90 Percent confidence interval - upper                     0.064
+
+Standardized Root Mean Square Residual:
+
+  SRMR                                           0.099       0.099
+
+Parameter Estimates:
+
+  Information                                      Observed
+  Observed information based on                     Hessian
+  Standard errors                        Robust.huber.white
+
+Regressions:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+  OCI_hoard ~                                         
+    OCI_chck  (c1)    0.579    0.120    4.832    0.000
+  OCI_neutr ~                                         
+    OCI_hord  (c2)    0.768    0.080    9.639    0.000
+  OCI_order ~                                         
+    OCI_hord  (c3)    0.441    0.100    4.415    0.000
+    OCI_netr  (c4)    0.300    0.124    2.417    0.016
+  OCI_wash ~                                          
+    OCI_hord  (c5)    0.508    0.059    8.618    0.000
+    miscllny  (c6)    0.138    0.072    1.927    0.054
+  OCI_obse ~                                          
+    OCI_chck  (c7)    0.468    0.117    4.003    0.000
+    OCI_wash  (c8)    0.611    0.116    5.272    0.000
+    antichol  (c9)    0.224    0.092    2.435    0.015
+  EPS ~                                               
+    OCI_chck (c10)    0.519    0.147    3.531    0.000
+  antichol ~                                          
+    EPS      (c11)    0.239    0.060    3.971    0.000
+    psychic  (c12)    0.146    0.043    3.377    0.001
+  autonomic ~                                         
+    psychic  (c13)    0.192    0.042    4.558    0.000
+    RH       (c14)    0.327    0.068    4.777    0.000
+  allergic ~                                          
+    RH       (c15)    0.197    0.049    3.997    0.000
+  psychic ~                                           
+    EPS      (c16)    0.981    0.113    8.712    0.000
+  miscellany ~                                        
+    psychic  (c17)    0.117    0.027    4.266    0.000
+    RH       (c18)    0.177    0.049    3.609    0.000
+  RH ~                                                
+    EPS      (c19)    0.742    0.127    5.857    0.000
+  PANSS_pos ~                                         
+    HP_phy   (c20)    0.323    0.117    2.757    0.006
+  PANSS_neg ~                                         
+    PANSS_gn (c21)    0.197    0.070    2.803    0.005
+  PANSS_gen ~                                         
+    PANSS_ps (c22)    0.759    0.155    4.900    0.000
+  HP_phy ~                                            
+    HP_emo   (c23)    0.947    0.092   10.251    0.000
+
+Covariances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+ .OCI_order ~~                                        
+   .OCI_obse          0.386    0.286    1.349    0.177
+   .autonomic         0.028    0.216    0.131    0.896
+   .allergic          0.316    0.223    1.420    0.156
+   .PANSS_neg         0.153    0.430    0.356    0.722
+ .OCI_obse ~~                                         
+   .autonomic         0.320    0.480    0.667    0.505
+   .allergic         -0.202    0.343   -0.588    0.557
+   .PANSS_neg        -0.044    1.195   -0.037    0.970
+ .autonomic ~~                                        
+   .allergic          0.216    0.272    0.793    0.428
+   .PANSS_neg         0.651    0.588    1.107    0.268
+ .allergic ~~                                         
+   .PANSS_neg         0.417    0.786    0.531    0.596
+
+Variances:
+                   Estimate  Std.Err  z-value  P(&gt;|z|)
+   .OCI_hoard         2.734    0.446    6.134    0.000
+   .OCI_neutr         1.878    0.311    6.044    0.000
+   .OCI_order         2.423    0.467    5.185    0.000
+   .OCI_wash          2.280    0.457    4.990    0.000
+   .OCI_obse          6.869    1.378    4.985    0.000
+   .EPS               8.668    1.348    6.431    0.000
+   .antichol          4.075    0.631    6.454    0.000
+   .autonomic         4.677    0.710    6.587    0.000
+   .allergic          3.070    0.626    4.905    0.000
+   .psychic          17.534    2.241    7.825    0.000
+   .miscellany        2.456    0.339    7.241    0.000
+   .RH                7.789    1.640    4.751    0.000
+   .PANSS_pos        16.655    2.026    8.219    0.000
+   .PANSS_neg        16.483    2.301    7.162    0.000
+   .PANSS_gen        32.006    4.303    7.438    0.000
+   .HP_phy            8.820    1.535    5.746    0.000</code></pre>
 <pre class="r"><code>net2$fit_plot</code></pre>
 <div id="htmlwidget-790f45ff4ab98b5f1172" style="width:672px;height:480px;" class="grViz html-widget"></div>
 <script type="application/json" data-for="htmlwidget-790f45ff4ab98b5f1172">{"x":{"diagram":" digraph fit { \n graph [ overlap = true, fontsize = 10 ] \n node [ shape = box ] \n node [shape = box] \n OCI_check; OCI_hoard; OCI_neutr; miscellany; OCI_wash; antichol; EPS; psychic; RH; HP_phy; PANSS_gen; PANSS_pos; HP_emo; OCI_order; OCI_obse; autonomic; allergic; PANSS_neg \n node [shape = oval] \n  \n \n edge [ color = black ] \n OCI_check->OCI_hoard [label = \"0.58***\"] OCI_hoard->OCI_neutr [label = \"0.77***\"] OCI_hoard->OCI_order [label = \"0.44***\"] OCI_neutr->OCI_order [label = \"0.3*\"] OCI_hoard->OCI_wash [label = \"0.51***\"] miscellany->OCI_wash [label = \"\"] OCI_check->OCI_obse [label = \"0.47***\"] OCI_wash->OCI_obse [label = \"0.61***\"] antichol->OCI_obse [label = \"0.22*\"] OCI_check->EPS [label = \"0.52***\"] EPS->antichol [label = \"0.24***\"] psychic->antichol [label = \"0.15***\"] psychic->autonomic [label = \"0.19***\"] RH->autonomic [label = \"0.33***\"] RH->allergic [label = \"0.2***\"] EPS->psychic [label = \"0.98***\"] psychic->miscellany [label = \"0.12***\"] RH->miscellany [label = \"0.18***\"] EPS->RH [label = \"0.74***\"] HP_phy->PANSS_pos [label = \"0.32**\"] PANSS_gen->PANSS_neg [label = \"0.2**\"] PANSS_pos->PANSS_gen [label = \"0.76***\"] HP_emo->HP_phy [label = \"0.95***\"]  \n}","config":{"engine":"dot","options":null}},"evals":[],"jsHooks":[]}</script>
@@ -653,76 +949,76 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
- [1] extrafont_0.17      ggraph_2.0.0        tidygraph_1.1.2    
- [4] bnlearn_4.5         ggsci_2.9           patchwork_1.0.0    
- [7] here_0.1            anselmnetwork_0.1.0 anselmEDA_0.1.0    
-[10] glue_1.3.1          forcats_0.4.0       stringr_1.4.0      
-[13] dplyr_0.8.3         purrr_0.3.3         readr_1.3.1        
-[16] tidyr_1.0.0         tibble_2.1.3        ggplot2_3.2.1      
-[19] tidyverse_1.3.0    
+ [1] lavaan_0.6-5        extrafont_0.17      ggraph_2.0.0       
+ [4] tidygraph_1.1.2     bnlearn_4.5         ggsci_2.9          
+ [7] patchwork_1.0.0     here_0.1            anselmnetwork_0.1.0
+[10] anselmEDA_0.1.0     glue_1.3.1          forcats_0.4.0      
+[13] stringr_1.4.0       dplyr_0.8.3         purrr_0.3.3        
+[16] readr_1.3.1         tidyr_1.0.0         tibble_2.1.3       
+[19] ggplot2_3.2.1       tidyverse_1.3.0    
 
 loaded via a namespace (and not attached):
-  [1] gganimate_1.0.4     lavaan_0.6-5        acepack_1.4.1      
-  [4] bit64_0.9-7         knitr_1.26          Rook_1.1-1         
-  [7] data.table_1.12.6   rpart_4.1-15        generics_0.0.2     
- [10] RSQLite_2.1.4       mice_3.6.0          DiagrammeR_1.0.1   
- [13] chron_2.3-54        bit_1.1-14          webshot_0.5.2      
- [16] xml2_1.2.2          lubridate_1.7.4     httpuv_1.5.2       
- [19] assertthat_0.2.1    gifski_0.8.6        viridis_0.5.1      
- [22] xfun_0.11           bnpa_0.3.0          hms_0.5.2          
- [25] evaluate_0.14       promises_1.1.0      progress_1.2.2     
- [28] caTools_1.17.1.3    dbplyr_1.4.2        readxl_1.3.1       
- [31] igraph_1.2.4.2      DBI_1.0.0           quantmod_0.4-15    
- [34] htmlwidgets_1.5.1   stats4_3.6.1        ellipsis_0.3.0     
- [37] corrplot_0.84       backports_1.1.5     V8_2.3             
- [40] ggiraph_0.7.0       pbivnorm_0.6.0      moments_0.14       
- [43] libcoin_1.0-5       influenceR_0.1.0    vctrs_0.2.0        
- [46] TTR_0.23-5          ROCR_1.0-7          prettydoc_0.3.1    
- [49] abind_1.4-5         withr_2.1.2         ggforce_0.3.1      
- [52] RcmdrMisc_2.5-1     checkmate_1.9.4     smbinning_0.9      
- [55] xts_0.11-2          prettyunits_1.0.2   mnormt_1.5-5       
- [58] cluster_2.1.0       lazyeval_0.2.2      crayon_1.3.4       
- [61] labeling_0.3        pkgconfig_2.0.3     ordinal_2019.4-25  
- [64] tweenr_1.0.1        nlme_3.1-142        nnet_7.3-12        
- [67] lavaanPlot_0.5.1    rlang_0.4.2         lifecycle_0.1.0    
- [70] mitml_0.3-7         sandwich_2.5-1      downloader_0.4     
- [73] extrafontdb_1.0     rgexf_0.15.3        modelr_0.1.5       
- [76] cellranger_1.1.0    tcltk_3.6.1         rprojroot_1.3-2    
- [79] polyclip_1.10-0     partykit_1.2-5      Matrix_1.2-18      
- [82] carData_3.0-3       boot_1.3-23         zoo_1.8-6          
- [85] pan_1.6             reprex_0.3.0        base64enc_0.1-3    
- [88] ggridges_0.5.1      png_0.1-7           viridisLite_0.3.0  
- [91] bitops_1.0-6        orientDAG_1.0       KernSmooth_2.23-16 
- [94] visNetwork_2.0.8    pander_0.6.3        blob_1.2.0         
- [97] workflowr_1.5.0     classInt_0.4-2      brew_1.0-6         
-[100] scales_1.1.0        memoise_1.1.0       magrittr_1.5       
-[103] plyr_1.8.4          gplots_3.0.1.1      gdata_2.18.0       
-[106] compiler_3.6.1      tinytex_0.17        kableExtra_1.1.0   
-[109] RColorBrewer_1.1-2  lme4_1.1-21         dlookr_0.3.12      
-[112] cli_1.1.0           dagitty_0.2-2       htmlTable_1.13.3   
-[115] Formula_1.2-3       MASS_7.3-51.4       tidyselect_0.2.5   
-[118] stringi_1.4.3       jtools_2.0.1        yaml_2.2.0         
-[121] latticeExtra_0.6-28 ggrepel_0.8.1       grid_3.6.1         
-[124] tools_3.6.1         parallel_3.6.1      rio_0.5.16         
-[127] rstudioapi_0.10     uuid_0.1-2          foreign_0.8-72     
-[130] inum_1.0-1          git2r_0.26.1        DMwR_0.4.1         
-[133] gridExtra_2.3       farver_2.0.1        digest_0.6.23      
-[136] ggformula_0.9.2     proto_1.0.0         nortest_1.0-4      
-[139] Rcpp_1.0.3          car_3.0-5           broom_0.5.2        
-[142] later_1.0.0         httr_1.4.1          gdtools_0.2.1      
-[145] psych_1.8.12        ucminf_1.1-4        ggstance_0.3.3     
-[148] colorspace_1.4-1    rvest_0.3.5         XML_3.98-1.20      
-[151] fs_1.3.1            splines_3.6.1       graphlayouts_0.5.0 
-[154] systemfonts_0.1.1   xtable_1.8-4        jsonlite_1.6       
-[157] nloptr_1.2.1        zeallot_0.1.0       R6_2.4.1           
-[160] Hmisc_4.3-0         gsubfn_0.7          pillar_1.4.2       
-[163] htmltools_0.4.0     minqa_1.2.4         class_7.3-15       
-[166] jomo_2.6-10         mvtnorm_1.0-11      lattice_0.20-38    
-[169] numDeriv_2016.8-1.1 sqldf_0.4-11        curl_4.3           
-[172] gtools_3.8.1        Rttf2pt1_1.3.7      zip_2.0.4          
-[175] openxlsx_4.1.3      survival_3.1-8      rmarkdown_1.18     
-[178] munsell_0.5.0       e1071_1.7-3         haven_2.2.0        
-[181] mosaicCore_0.6.0    gtable_0.3.0       </code></pre>
+  [1] gganimate_1.0.4     acepack_1.4.1       bit64_0.9-7        
+  [4] knitr_1.26          Rook_1.1-1          data.table_1.12.6  
+  [7] rpart_4.1-15        generics_0.0.2      RSQLite_2.1.4      
+ [10] mice_3.6.0          DiagrammeR_1.0.1    chron_2.3-54       
+ [13] bit_1.1-14          webshot_0.5.2       xml2_1.2.2         
+ [16] lubridate_1.7.4     httpuv_1.5.2        assertthat_0.2.1   
+ [19] gifski_0.8.6        viridis_0.5.1       xfun_0.11          
+ [22] bnpa_0.3.0          hms_0.5.2           evaluate_0.14      
+ [25] promises_1.1.0      progress_1.2.2      caTools_1.17.1.3   
+ [28] dbplyr_1.4.2        readxl_1.3.1        igraph_1.2.4.2     
+ [31] DBI_1.0.0           quantmod_0.4-15     htmlwidgets_1.5.1  
+ [34] stats4_3.6.1        ellipsis_0.3.0      corrplot_0.84      
+ [37] backports_1.1.5     V8_2.3              ggiraph_0.7.0      
+ [40] pbivnorm_0.6.0      moments_0.14        libcoin_1.0-5      
+ [43] influenceR_0.1.0    vctrs_0.2.0         TTR_0.23-5         
+ [46] ROCR_1.0-7          prettydoc_0.3.1     abind_1.4-5        
+ [49] withr_2.1.2         ggforce_0.3.1       RcmdrMisc_2.5-1    
+ [52] checkmate_1.9.4     smbinning_0.9       xts_0.11-2         
+ [55] prettyunits_1.0.2   mnormt_1.5-5        cluster_2.1.0      
+ [58] lazyeval_0.2.2      crayon_1.3.4        labeling_0.3       
+ [61] pkgconfig_2.0.3     ordinal_2019.4-25   tweenr_1.0.1       
+ [64] nlme_3.1-142        nnet_7.3-12         lavaanPlot_0.5.1   
+ [67] rlang_0.4.2         lifecycle_0.1.0     mitml_0.3-7        
+ [70] sandwich_2.5-1      downloader_0.4      extrafontdb_1.0    
+ [73] rgexf_0.15.3        modelr_0.1.5        cellranger_1.1.0   
+ [76] tcltk_3.6.1         rprojroot_1.3-2     polyclip_1.10-0    
+ [79] partykit_1.2-5      Matrix_1.2-18       carData_3.0-3      
+ [82] boot_1.3-23         zoo_1.8-6           pan_1.6            
+ [85] reprex_0.3.0        base64enc_0.1-3     ggridges_0.5.1     
+ [88] png_0.1-7           viridisLite_0.3.0   bitops_1.0-6       
+ [91] orientDAG_1.0       KernSmooth_2.23-16  visNetwork_2.0.8   
+ [94] pander_0.6.3        blob_1.2.0          workflowr_1.5.0    
+ [97] classInt_0.4-2      brew_1.0-6          scales_1.1.0       
+[100] memoise_1.1.0       magrittr_1.5        plyr_1.8.4         
+[103] gplots_3.0.1.1      gdata_2.18.0        compiler_3.6.1     
+[106] tinytex_0.17        kableExtra_1.1.0    RColorBrewer_1.1-2 
+[109] lme4_1.1-21         dlookr_0.3.12       cli_1.1.0          
+[112] dagitty_0.2-2       htmlTable_1.13.3    Formula_1.2-3      
+[115] MASS_7.3-51.4       tidyselect_0.2.5    stringi_1.4.3      
+[118] jtools_2.0.1        yaml_2.2.0          latticeExtra_0.6-28
+[121] ggrepel_0.8.1       grid_3.6.1          tools_3.6.1        
+[124] parallel_3.6.1      rio_0.5.16          rstudioapi_0.10    
+[127] uuid_0.1-2          foreign_0.8-72      inum_1.0-1         
+[130] git2r_0.26.1        DMwR_0.4.1          gridExtra_2.3      
+[133] farver_2.0.1        digest_0.6.23       ggformula_0.9.2    
+[136] proto_1.0.0         nortest_1.0-4       Rcpp_1.0.3         
+[139] car_3.0-5           broom_0.5.2         later_1.0.0        
+[142] httr_1.4.1          gdtools_0.2.1       psych_1.8.12       
+[145] ucminf_1.1-4        ggstance_0.3.3      colorspace_1.4-1   
+[148] rvest_0.3.5         XML_3.98-1.20       fs_1.3.1           
+[151] splines_3.6.1       graphlayouts_0.5.0  systemfonts_0.1.1  
+[154] xtable_1.8-4        jsonlite_1.6        nloptr_1.2.1       
+[157] zeallot_0.1.0       R6_2.4.1            Hmisc_4.3-0        
+[160] gsubfn_0.7          pillar_1.4.2        htmltools_0.4.0    
+[163] minqa_1.2.4         class_7.3-15        jomo_2.6-10        
+[166] mvtnorm_1.0-11      lattice_0.20-38     numDeriv_2016.8-1.1
+[169] sqldf_0.4-11        curl_4.3            gtools_3.8.1       
+[172] Rttf2pt1_1.3.7      zip_2.0.4           openxlsx_4.1.3     
+[175] survival_3.1-8      rmarkdown_1.18      munsell_0.5.0      
+[178] e1071_1.7-3         haven_2.2.0         mosaicCore_0.6.0   
+[181] gtable_0.3.0       </code></pre>
 </div>
 </div>
 </div>
