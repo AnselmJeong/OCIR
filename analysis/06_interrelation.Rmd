@@ -1,0 +1,180 @@
+---
+title: "Inter-relationship among OCIR, LUNSERS, PANSS"
+output: html_notebook
+---
+
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(glue)
+  library(anselmEDA)
+  library(here)
+  library(patchwork)
+  library(ggsci)
+  library(lemon)
+  library(tidygraph)
+  library(ggraph)
+  library(corrr)
+  library(EGAnet)
+  library(extrafont)
+})
+
+set_graph_style()
+```
+
+# Load data
+
+
+```{r}
+data <- readRDS(paste0(here(), "/data/data.rds"))
+```
+
+
+# Correlation plots
+### Correlation plot for raw data
+```{r fig.width=7, fig.height=7}
+result <- data %>%
+  select(starts_with("OCI"), 
+         -OCI_total,
+         EPS:miscellany, RH, 
+         starts_with("HW"), 
+         starts_with('HP'),
+         -HP_total) %>% plot_corr
+```
+### Correlation plot for delta data
+```{r fig.width=7, fig.height=7}
+
+get_diff <- function(x) {
+  c(NA, diff(x))
+}
+
+data_delta <- data %>% select(
+  hosp_id, 
+  measure_point,
+  starts_with("OCI"),
+  -OCI_total,
+  EPS:miscellany, RH,
+  starts_with('HW'),
+  starts_with('HP'),
+  -HP_total) %>% 
+  group_by(hosp_id) %>% 
+  arrange(measure_point) %>% 
+  mutate_at(vars(-hosp_id, -measure_point), get_diff) %>% 
+  ungroup() %>% drop_na
+  
+result <- data_delta %>% select(-hosp_id, -measure_point) %>% plot_corr
+```
+
+### Repeated measure correlation plot
+
+```{r fig.width=7, fig.height=7}
+result <- data %>% 
+  select(hosp_id, 
+         starts_with("OCI"), 
+         -OCI_total,
+         EPS:miscellany, RH,
+         starts_with("HW"), 
+         starts_with('HP'),
+         -HP_total) %>% 
+  plot_rmcorr(subj_id = 'hosp_id')
+```
+
+
+# Network plot of variables.
+
+### correlation based plot?
+
+```{r}
+library(tidygraph)
+library(ggraph)
+edges <- result$r %>% as_cordf %>% pivot_longer(-rowname) %>% drop_na
+
+as_tbl_graph(edges, directed = F) %E>% 
+  filter(value >= 0.3) %>% 
+  mutate(weight=1/value) %N>% 
+  ggraph(layout='stress') +
+  geom_edge_link(aes(edge_alpha=1/weight, edge_width=1/weight)) +
+  scale_edge_alpha_continuous(range=c(0, 0.2)) +
+  geom_node_point(size=7, color="skyblue") +
+  geom_node_text(aes(label=name), size=4, repel = T)
+```
+
+### Partial correlation based plots?
+
+#### Using raw data
+
+```{r}
+net1<- data %>%
+  select(starts_with("OCI"), 
+         -OCI_total,
+         EPS:miscellany, RH, 
+         starts_with("HW"), 
+         starts_with('HP'),
+         -HP_total) %>% EGA
+```
+
+
+```{r}
+gr1 <- as_tbl_graph(net1$network)
+
+gr1 %E>% filter(weight>=0.1) %>% ggraph(layout="stress") + 
+  geom_edge_link(aes(edge_alpha=weight, edge_width=weight)) +
+  geom_node_point(aes(color=factor(group_walktrap(weights = weight)),
+                      size=centrality_random_walk())) +
+  geom_node_text(aes(label=name), repel=T) +
+  scale_size_continuous(range=c(0, 12), guide = FALSE) +
+  scale_edge_width_continuous(range=c(0.5, 3)) +
+  scale_edge_alpha_continuous(range=c(0.1, 0.5)) +
+  theme(legend.position = 'none')
+
+```
+
+#### Using delta data
+
+```{r}
+net2 <- data_delta %>% 
+  select(-hosp_id, -measure_point) %>% 
+  EGA
+
+gr2 <- as_tbl_graph(net2$network)
+```
+
+
+```{r}
+gr2 %>% ggraph(layout="stress") + 
+  geom_edge_link(aes(edge_alpha=weight, edge_width=weight)) +
+  geom_node_point(aes(color=factor(group_walktrap(weights = weight)),
+                      size=centrality_random_walk())) +
+  geom_node_text(aes(label=name), repel=T) +
+  scale_size_continuous(range=c(0, 12), guide = FALSE) +
+  scale_edge_width_continuous(range=c(0.5, 3)) +
+  scale_edge_alpha_continuous(range=c(0.1, 0.5)) +
+  theme(legend.position = 'none')
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

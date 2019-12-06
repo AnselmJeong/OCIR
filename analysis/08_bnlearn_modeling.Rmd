@@ -1,0 +1,99 @@
+---
+title: "bnlearn causal network modeling"
+output: html_notebook
+---
+
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(glue)
+  library(anselmEDA)
+  library(anselmnetwork)
+  library(here)
+  library(patchwork)
+  library(ggsci)
+  library(bnlearn)
+  library(tidygraph)
+  library(ggraph)
+  library(extrafont)
+})
+
+set_graph_style()
+```
+
+# Load data
+
+```{r}
+data_tr <- readRDS(paste0(here(), "/data/data_transformed.rds"))
+data <- readRDS(paste0(here(), "/data/data.rds"))
+```
+
+# `bnlearn` modeling
+
+## with Raw data (log transformed)
+
+```{r}
+net1<- data_tr %>%
+  select(starts_with("OCI"), age, 
+         -OCI_total,
+         EPS:miscellany, RH, 
+         starts_with("PANSS"), 
+         -PANSS_total,
+         starts_with('HP'),
+         -HP_total) %>% 
+    drop_na %>% learn_bn(exogenous_nodes = c("age"))
+```
+
+```{r}
+summary(net1$lv_fit, fit.measure=T)
+```
+```{r}
+net1$fit_plot
+```
+
+## with delta data (log transformed)
+```{r}
+get_diff <- function(x) {
+  c(NA, diff(x))
+}
+
+data_delta <- data %>% select(
+  hosp_id, 
+  measure_point,
+  age,
+  starts_with("OCI"),
+  -OCI_total,
+  EPS:miscellany, RH,
+  starts_with('PANSS'),
+  -PANSS_total,
+  starts_with('HP'),
+  -HP_total) %>% 
+  group_by(hosp_id) %>% 
+  arrange(measure_point) %>% 
+  mutate_at(vars(-hosp_id, -measure_point, -age), get_diff) %>% 
+  ungroup() %>% drop_na
+```
+
+```{r}
+net2<- data_delta %>%
+  select(starts_with("OCI"), age,
+         EPS:miscellany, RH, 
+         starts_with("PANSS"), 
+         starts_with('HP')) %>% drop_na %>% learn_bn(exogenous_nodes = c("age"))
+```
+
+
+```{r}
+summary(net2$lv_fit, fit.measure=T)
+```
+```{r}
+net2$fit_plot
+```
+
+
+
+
+
+
+

@@ -1,0 +1,227 @@
+---
+title: "Linear Mixed effect modeling"
+output: html_notebook
+---
+
+
+```{r}
+suppressPackageStartupMessages({
+  library(tidyverse)
+  library(glue)
+  library(anselmEDA)
+  library(here)
+  library(patchwork)
+  library(ggsci)
+  library(lemon)
+  library(lme4)
+  library(lmerTest)
+  library(effects)
+})
+
+theme_set(theme_bw())
+```
+
+# Load data
+
+```{r}
+data <- readRDS(paste0(here(), "/data/data.rds"))
+```
+
+# LME를 하기 전에
+
+* OCI의 subscale 들을 각각 dependent variable로 하고...
+* independent variable로는 LUN_score, HP_emo, PANSS_gen, HW_anx...
+
+```{r}
+tmp <- data %>% select(hosp_id,
+                       sex, age,
+                       measure_point,
+                       starts_with('OCI'),
+                       starts_with('HP'),
+                       starts_with('HW'),
+                       EPS:RH, LUN_score) %>% 
+  filter(measure_point >= 0) %>% 
+  drop_na %>% 
+  group_by(hosp_id) %>% 
+  mutate(LUN_score_mean=mean(LUN_score),
+         LUN_score_dev=LUN_score - mean(LUN_score),
+         RH_mean=mean(RH),
+         RH_dev=RH - mean(RH),
+         EPS_mean=mean(EPS),
+         EPS_dev=EPS - mean(EPS),
+         antichol_mean=mean(antichol),
+         antichol_dev=antichol - mean(antichol),
+         autonomic_mean=mean(autonomic),
+         autonomic_dev=autonomic - mean(autonomic),
+         allergic_mean=mean(allergic),
+         allergic_dev=allergic - mean(allergic),
+         psychic_mean=mean(psychic),
+         psychic_dev=psychic - mean(psychic),
+         hormonal_mean=mean(hormonal),
+         hormonal_dev=hormonal - mean(hormonal),
+         miscellany_mean=mean(miscellany),
+         miscellany_dev=miscellany - mean(miscellany),
+         HP_phy_mean=mean(HP_phy),
+         HP_phy_dev=HP_phy - mean(HP_phy),
+         HP_emo_mean=mean(HP_emo),
+         HP_emo_dev=HP_emo - mean(HP_emo),
+         HW_pos_mean=mean(HW_pos),
+         HW_pos_dev=HW_pos - mean(HW_pos),
+         HW_neg_mean=mean(HW_neg),
+         HW_neg_dev=HW_neg - mean(HW_neg),
+         HW_acti_mean=mean(HW_acti),
+         HW_acti_dev=HW_acti - mean(HW_acti),
+         HW_auti_mean=mean(HW_auti),
+         HW_auti_dev=HW_auti - mean(HW_auti),
+         HW_anx_mean=mean(HW_anx),
+         HW_anx_dev=HW_anx - mean(HW_anx)) %>% 
+  ungroup %>% 
+  mutate(time=scale(measure_point),
+         LUN_score_mean_s=scale(LUN_score_mean),
+         RH_mean_s=scale(RH_mean),
+         HP_phy_mean_s=scale(HP_phy_mean),
+         HP_emo_mean_s=scale(HP_emo_mean),
+         HW_pos_mean_s=scale(HW_pos_mean),
+         HW_neg_mean_s=scale(HW_neg_mean),
+         HW_acti_mean_s=scale(HW_acti_mean),
+         HW_auti_mean_s=scale(HW_auti_mean),
+         HW_anx_mean_s=scale(HW_anx_mean))
+```
+
+
+
+
+```{r}
+model_comparison <- function(dv) {
+  cat("======================  ")
+  cat(glue("Dependnet variable: {dv}"))
+  cat("  ======================\n\n")
+  
+  model_0 <- lmer(as.formula(glue("{dv}~ time + (1|hosp_id)")), data = tmp, REML = FALSE)
+  model_1 <- lmer(as.formula(glue("{dv}~ time + sex + age + (1|hosp_id)")), data = tmp, REML = FALSE)
+  model_2 <- lmer(as.formula(glue("{dv}~ time + sex + age + 
+                                  RH_mean_s + RH_dev +
+                                  (1|hosp_id)")), data = tmp, REML = FALSE)
+  model_3 <- lmer(as.formula(glue("{dv}~ time + sex + age + 
+                                  RH_mean_s + RH_dev +
+                                  LUN_score_mean_s + LUN_score_dev +
+                                  (1|hosp_id)")), data = tmp, REML = FALSE)
+  model_4 <- lmer(as.formula(glue("{dv}~ time + sex + age + 
+                                  RH_mean_s + RH_dev +
+                                  LUN_score_mean_s + LUN_score_dev + 
+                                  HW_anx_mean_s + HW_anx_dev +
+                                  HW_neg_mean_s + HW_neg_dev +
+                                  (1|hosp_id)")), data = tmp, REML = FALSE)
+  model_5 <- lmer(as.formula(glue("{dv}~ time + sex + age + 
+                                  RH_mean_s + RH_dev +
+                                  LUN_score_mean_s + LUN_score_dev + 
+                                  HW_pos_mean_s + HW_pos_dev +
+                                  HW_acti_mean_s + HW_acti_dev +
+                                  HW_auti_mean_s + HW_auti_dev +
+                                  HW_anx_mean_s + HW_anx_dev +
+                                  HW_neg_mean_s + HW_neg_dev +
+                                  (1|hosp_id)")), data = tmp, REML = FALSE)
+  model_6 <- lmer(as.formula(glue("{dv}~ time + sex + age + 
+                                  RH_mean_s + RH_dev +
+                                  LUN_score_mean_s + LUN_score_dev + 
+                                  HW_pos_mean_s + HW_pos_dev +
+                                  HW_acti_mean_s + HW_acti_dev +
+                                  HW_auti_mean_s + HW_auti_dev +
+                                  HW_anx_mean_s + HW_anx_dev +
+                                  HW_neg_mean_s + HW_neg_dev +
+                                  HP_phy_mean_s + HP_phy_dev + 
+                                  HP_emo_mean_s + HP_emo_dev + 
+                                  (1|hosp_id)")), data = tmp, REML = FALSE)
+  print(anova(model_0, model_1, model_2, model_3, model_4, model_5, model_6))
+  invisible(list(model_0, model_1, model_2, model_3, model_4, model_5, model_6))
+}
+```
+
+```{r}
+model_comparison('OCI_total')
+```
+
+```{r}
+model_comparison('OCI_check')
+model_comparison('OCI_hoard')
+model_comparison('OCI_neutr')
+model_comparison('OCI_order')
+model_comparison('OCI_wash')
+model_comparison('OCI_obse')
+```
+```{r fig.width=7, fig.height=9}
+model_4 <- lmer(OCI_total ~ time + sex + age + 
+                  RH_mean_s + RH_dev +
+                  LUN_score_mean_s + LUN_score_dev + 
+                  HW_anx_mean_s + HW_anx_dev +
+                  HW_neg_mean_s + HW_neg_dev +
+                  (1|hosp_id), data = tmp, REML = FALSE)
+
+summary(model_4)
+
+pe <- predictorEffects(model_4)
+plot(pe)
+```
+
+```{r}
+model_comparison2 <- function(dv) {
+  model_0 <- lmer(as.formula(glue("{dv}~ time + (1|hosp_id)")), data = tmp, REML = FALSE)
+  model_1 <- lmer(as.formula(glue("{dv}~ time + sex + age + 
+                                  (1|hosp_id)")), data = tmp, REML = FALSE)
+  model_2 <- lmer(as.formula(glue("{dv}~ time + sex + age +  
+                                 EPS_mean+EPS_dev+antichol_mean+antichol_dev+autonomic_mean+autonomic_dev+allergic_mean+allergic_dev+psychic_mean+psychic_dev+hormonal_mean+hormonal_dev+miscellany_mean+miscellany_dev + (1|hosp_id)")), data = tmp, REML = FALSE)
+  model_3 <- lmer(as.formula(glue("{dv}~ time + sex + age + 
+                                  HW_anx_mean_s + HW_anx_dev +
+                                  HW_neg_mean_s + HW_neg_dev +
+                                 EPS_mean+EPS_dev+antichol_mean+antichol_dev+autonomic_mean+autonomic_dev+allergic_mean+allergic_dev+psychic_mean+psychic_dev+hormonal_mean+hormonal_dev+miscellany_mean+miscellany_dev + 
+                                  (1|hosp_id)")), data = tmp, REML = FALSE)
+  model_4 <- lmer(as.formula(glue("{dv}~ time + sex + age + 
+                                 EPS_mean+EPS_dev+antichol_mean+antichol_dev+autonomic_mean+autonomic_dev+allergic_mean+allergic_dev+psychic_mean+psychic_dev+hormonal_mean+hormonal_dev+miscellany_mean+miscellany_dev + 
+                                  HW_anx_mean_s + HW_anx_dev +
+                                  HW_neg_mean_s + HW_neg_dev +
+                                  RH_mean_s + RH_dev +
+                                  (1|hosp_id)")), data = tmp, REML = FALSE)
+  model_5 <- lmer(as.formula(glue("{dv}~ time + sex + age + 
+                                  RH_mean_s + RH_dev +
+                                 EPS_mean+EPS_dev+antichol_mean+antichol_dev+autonomic_mean+autonomic_dev+allergic_mean+allergic_dev+psychic_mean+psychic_dev+hormonal_mean+hormonal_dev+miscellany_mean+miscellany_dev + 
+                                  HW_anx_mean_s + HW_anx_dev +
+                                  HW_neg_mean_s + HW_neg_dev +
+                                  HW_pos_mean_s + HW_pos_dev +
+                                  HW_acti_mean_s + HW_acti_dev +
+                                  HW_auti_mean_s + HW_auti_dev +
+                                  (1|hosp_id)")), data = tmp, REML = FALSE)
+  model_6 <- lmer(as.formula(glue("{dv}~time + sex + age + 
+                                  RH_mean_s + RH_dev +
+                                 EPS_mean+EPS_dev+antichol_mean+antichol_dev+autonomic_mean+autonomic_dev+allergic_mean+allergic_dev+psychic_mean+psychic_dev+hormonal_mean+hormonal_dev+miscellany_mean+miscellany_dev + 
+                                  HW_anx_mean_s + HW_anx_dev +
+                                  HW_neg_mean_s + HW_neg_dev +
+                                  HW_pos_mean_s + HW_pos_dev +
+                                  HW_acti_mean_s + HW_acti_dev +
+                                  HW_auti_mean_s + HW_auti_dev +
+                                  HP_phy_mean_s + HP_phy_dev + 
+                                  HP_emo_mean_s + HP_emo_dev + 
+                                  (1|hosp_id)")), data = tmp, REML = FALSE)
+  print(anova(model_0, model_1, model_2, model_3, model_4, model_5, model_6))
+  invisible(list(model_0, model_1, model_2, model_3, model_4, model_5, model_6))
+}
+```
+
+```{r}
+result2 <- model_comparison2('OCI_total')
+summary(result2[[4]])
+```
+
+
+
+
+
+
+
+```{r}
+# model <- lmer(LUN_score~PANSS_total*time+(PANSS_total||hosp_id)+(time||hosp_id), data=tmp)
+# ss = getME(model, c("theta", "fixef"))
+# model <- update(model, start=ss)
+# summary(model)
+```
+
+
