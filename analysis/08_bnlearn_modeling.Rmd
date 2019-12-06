@@ -17,6 +17,7 @@ suppressPackageStartupMessages({
   library(tidygraph)
   library(ggraph)
   library(extrafont)
+  library(lavaan)
 })
 
 set_graph_style()
